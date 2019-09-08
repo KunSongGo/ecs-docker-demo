@@ -130,7 +130,7 @@ Hello World! Welcome to demo-app[ec2-user@ip-10-0-0-204 ~]$
 ### Check image in ECR
 
 Go to your AWS Console and go to the ECR service page, you should be able to see the “ecs-demo-app” in the list of repositories, click on it and you will see the image details as below:
-[Image: Screenshot 2019-09-03 at 15.48.09.png]Copie the image URI and keep it,  we will use it to create the task definition. 
+![](images/image-in-ecr.png)Copie the image URI and keep it,  we will use it to create the task definition. 
 
 
 ## Create Task Definition in ECS 

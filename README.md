@@ -9,12 +9,10 @@
 
 ## Build docker image
 
-### 1. Install docker and docker-compose 
+### 1. Install docker
 
 ```
 [ec2-user@ip-10-0-0-204 ~]$ sudo yum install docker -y 
-[ec2-user@ip-10-0-0-204 ~]$ sudo yum install docker -y sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-[ec2-user@ip-10-0-0-204 ~]$ sudo chmod +x /usr/local/bin/docker-compose
 [ec2-user@ip-10-0-0-204 ~]$ mkdir demo-docker
 [ec2-user@ip-10-0-0-204 ~]$ cd demo-docker/
 [ec2-user@ip-10-0-0-204 demo-docker]$
@@ -77,7 +75,7 @@ python              3.7-alpine          39fb80313465        2 days ago          
 ### 7. Test the docker image 
 
 ```
-[ec2-user@ip-10-0-0-204 demo-docker]$ docker run -p 80:5000 54f8232440d3
+[ec2-user@ip-10-0-0-204 demo-docker]$ docker run -p 80:5000 <IMAGE-ID>
  * Serving Flask app "app.py"
  * Environment: production
    WARNING: This is a development server. Do not use it in a production deployment.
@@ -94,7 +92,7 @@ Hello World! Welcome to demo-app[ec2-user@ip-10-0-0-204 ~]$
 
 ## Push image to ECR 
 
-### Create ECR repository in AWS 
+### 1. Create ECR repository in AWS 
 
 ```
 [ec2-user@ip-10-0-0-204 ~]$ aws ecr create-repository --repository-name ecs-demo-repository --region eu-west-1
@@ -109,31 +107,31 @@ Hello World! Welcome to demo-app[ec2-user@ip-10-0-0-204 ~]$
 }
 ```
 
-### tag image to repo
+### 2. Tag image to repo
 
 ```
 [ec2-user@ip-10-0-0-204 ~]$ docker tag ecs-demo-app xxxxxxxx.dkr.ecr.eu-west-1.amazonaws.com/ecs-demo-repository
 ```
 
-### get docker login credentials 
+### 3. Get docker login credentials 
 
 ```
 [ec2-user@ip-10-0-0-204 ~]$ aws ecr get-login --no-include-email --region eu-west-1
 ```
 
-### push image to ECR 
+### 4. Push image to ECR 
 
 ```
 [ec2-user@ip-10-0-0-204 ~]$ docker push xxxxxxxx.dkr.ecr.eu-west-1.amazonaws.com/ecs-demo-repository
 ```
 
-### Check image in ECR
+### 5. Check image in ECR
 
 Go to your AWS Console and go to the ECR service page, you should be able to see the “ecs-demo-app” in the list of repositories, click on it and you will see the image details as below:
 ![](images/image-in-ecr.png) Copie the image URI and keep it,  we will use it to create the task definition. 
 
 
-## Create Task Definition in ECS 
+## 6. Create Task Definition in ECS 
 
 1. Go the ECS page in your AWS console, click ‘Task definitions“ in the left side of the page.
 2. Click ”Create new Task Definition“, then choose ”Fargate“ then hit ”Next“, you will see a new page popped out. 
@@ -148,7 +146,7 @@ Go to your AWS Console and go to the ECR service page, you should be able to see
 Now we have created a Task Definition and we will use it to create a Service later. 
 
 
-## Create Fargate cluster in ECS
+## 7. Create Fargate cluster in ECS
 
 1. Go to “Cluster” in ECS service page in your AWS console
 2. Click “Create Cluster”, the leave the default selection of  “Networking only” panel and click '“Next”,
@@ -160,7 +158,7 @@ Now we have created a Task Definition and we will use it to create a Service lat
 Now we have a Fargate cluster and we are going to launch a Service. 
 
 
-## Create Service in ECS 
+## 8. Create Service in ECS 
 
 1. Go to the cluster details page and choose the “Services” tab, click “Create” button, you will see a new page popped out. 
 2. Choose “FARGATE” as launch type and “esc-fargate-demo” as Task Definition.
@@ -176,5 +174,4 @@ Now we have a Fargate cluster and we are going to launch a Service.
 12. The click “next”
 13. Leave the default option and hit “Next”
 14. Review the options you have choose and click “Create”
-15. Wait until all the Tasks to be deployed and enter the Network Load Balancer DNS name in your browser, you should see something similar to this: 
-16. ![](images/results.png)
+15. Wait until all the Tasks to be deployed and enter the Network Load Balancer DNS name in your browser, you should see something similar to this: ![](images/results.png)

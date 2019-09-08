@@ -46,17 +46,17 @@ In this step, you write a Dockerfile that builds a Docker image. The image conta
 In your project directory, create a file named `Dockerfile` and paste the following:
 
 ```
-`FROM python``:``3.7``-``alpine`
-`WORKDIR ``/``code`
-`ENV FLASK_APP app``.``py
-ENV FLASK_RUN_PORT 80`
-`ENV FLASK_RUN_HOST ``0.0``.``0.0`
-`RUN apk add ``--``no``-``cache gcc musl``-``dev linux``-``headers`
-`COPY requirements``.``txt requirements``.``txt`
-`RUN pip install ``-``r requirements``.``txt`
-`COPY ``.`` ``.`
-`CMD ``[``"flask"``,`` ``"run"``]`
-`EXPOSE 80`
+FROM python:3.7-alpine
+WORKDIR /code
+ENV FLASK_APP app.py
+ENV FLASK_RUN_PORT 80
+ENV FLASK_RUN_HOST 0.0.0.0
+RUN apk add --no-cache gcc musl-dev linux-headers
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+COPY . .
+CMD ["flask", "run"]
+EXPOSE 80
 ```
 
 ### 5. Build docker image

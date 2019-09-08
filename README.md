@@ -2,11 +2,10 @@
 
 ## Terminologies 
 
-* Docker image: 
-* Task Definition: 
-* Service: 
-* ECR
-* ECS 
+* Task Definition: A task definition is required to run Docker containers in Amazon ECS, it describes how your container should run in ECS.
+* Service: Amazon ECS allows you to run and maintain a specified number of instances of a task definition simultaneously in an Amazon ECS cluster. This is called a service. 
+* ECR: A registry to store docker images. 
+* ECS: AWS Elastic Container Service.
 
 ## Build docker image
 
@@ -47,17 +46,17 @@ In this step, you write a Dockerfile that builds a Docker image. The image conta
 In your project directory, create a file named `Dockerfile` and paste the following:
 
 ```
-FROM python:3.7-alpine
-WORKDIR /code
-ENV FLASK_APP app.py
-ENV FLASK_RUN_PORT 80
-ENV FLASK_RUN_HOST 0.0.0.0
-RUN apk add --no-cache gcc musl-dev linux-headers
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
-COPY . .
-CMD ["flask", "run"]
-EXPOSE 80
+`FROM python``:``3.7``-``alpine`
+`WORKDIR ``/``code`
+`ENV FLASK_APP app``.``py
+ENV FLASK_RUN_PORT 80`
+`ENV FLASK_RUN_HOST ``0.0``.``0.0`
+`RUN apk add ``--``no``-``cache gcc musl``-``dev linux``-``headers`
+`COPY requirements``.``txt requirements``.``txt`
+`RUN pip install ``-``r requirements``.``txt`
+`COPY ``.`` ``.`
+`CMD ``[``"flask"``,`` ``"run"``]`
+`EXPOSE 80`
 ```
 
 ### 5. Build docker image
@@ -131,7 +130,7 @@ Hello World! Welcome to demo-app[ec2-user@ip-10-0-0-204 ~]$
 ### Check image in ECR
 
 Go to your AWS Console and go to the ECR service page, you should be able to see the “ecs-demo-app” in the list of repositories, click on it and you will see the image details as below:
-[Image: image]Copie the image URI and keep it,  we will use it to create the task definition. 
+[Image: Screenshot 2019-09-03 at 15.48.09.png]Copie the image URI and keep it,  we will use it to create the task definition. 
 
 
 ## Create Task Definition in ECS 
@@ -142,9 +141,9 @@ Go to your AWS Console and go to the ECR service page, you should be able to see
 4. Choose ‘None“ in Task Role, leave the rest by default then go to ”Task size“ section.
 5. Select “1 GB” in “Task memory” and “0.5 vCPU” in “Task CPU” then hit “Add container” in this section.
 6.  Enter a name in “Container name” field, for this example we will use “ecs-demo-container”, paste the image URI you have copied previous, then scroll down to “Port mappings” and enter “80”  leave the protocol to “tcp” as below. 
-
-7. Scroll down and hit “Add”. 
-8. Leave the rest sections with default setting and click “Create” 
+7. [Image: Screenshot 2019-09-03 at 15.50.07.png]
+8.  Scroll down and hit “Add”. 
+9. Leave the rest sections with default setting and click “Create” 
 
 Now we have created a Task Definition and we will use it to create a Service later. 
 
@@ -179,5 +178,3 @@ Now we have a Fargate cluster and we are going to launch a Service.
 14. Review the options you have choose and click “Create”
 15. Wait until all the Tasks to be deployed and enter the Network Load Balancer DNS name in your browser, you should see something similar to this: 
 16. [Image: Screenshot 2019-09-03 at 23.02.04.png]
-
-

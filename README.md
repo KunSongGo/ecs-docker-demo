@@ -130,7 +130,7 @@ Hello World! Welcome to demo-app[ec2-user@ip-10-0-0-204 ~]$
 ### Check image in ECR
 
 Go to your AWS Console and go to the ECR service page, you should be able to see the “ecs-demo-app” in the list of repositories, click on it and you will see the image details as below:
-![](images/image-in-ecr.png)Copie the image URI and keep it,  we will use it to create the task definition. 
+![](images/image-in-ecr.png) Copie the image URI and keep it,  we will use it to create the task definition. 
 
 
 ## Create Task Definition in ECS 
@@ -141,7 +141,7 @@ Go to your AWS Console and go to the ECR service page, you should be able to see
 4. Choose ‘None“ in Task Role, leave the rest by default then go to ”Task size“ section.
 5. Select “1 GB” in “Task memory” and “0.5 vCPU” in “Task CPU” then hit “Add container” in this section.
 6.  Enter a name in “Container name” field, for this example we will use “ecs-demo-container”, paste the image URI you have copied previous, then scroll down to “Port mappings” and enter “80”  leave the protocol to “tcp” as below. 
-7. [Image: Screenshot 2019-09-03 at 15.50.07.png]
+7. ![](images/add-container.png)
 8.  Scroll down and hit “Add”. 
 9. Leave the rest sections with default setting and click “Create” 
 
@@ -154,7 +154,7 @@ Now we have created a Task Definition and we will use it to create a Service lat
 2. Click “Create Cluster”, the leave the default selection of  “Networking only” panel and click '“Next”,
 3. Enter a name in “Cluster name” field 
 4. Check the “Create VPC” and leave all as default and click “Create” 
-5. [Image: Screenshot 2019-09-03 at 17.26.37.png]
+5. ![](images/add-vpc.png)
 6. Note the newly created VPC id and we will use it in “Create Service in ECS” section.
 
 Now we have a Fargate cluster and we are going to launch a Service. 
@@ -170,11 +170,11 @@ Now we have a Fargate cluster and we are going to launch a Service.
 6. In “Load Balancing” section, choose “Network Load Balancer”, you will see an alert saying “No load balancer is found” 
 7. Click the link “EC2 Console” to create a Network Load balancer“ by following this guide (https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancer-getting-started.html) and note the Network Load Balancer DNS name.
 8. Once you have created a Network Load Balancer, click refresh button and you should be able to see the load balancer you’ve created. Choose that Network Load Balancer and then click the button "Add to load balancer" button 
-9. [Image: Screenshot 2019-09-03 at 22.46.37.png]
+9. ![](images/add-nlb.png)
 10. Enter “80” in the second field of “Production listener port” 
-11. [Image: Screenshot 2019-09-03 at 22.48.46.png]
+11. ![](images/add-target-group.png)
 12. The click “next”
 13. Leave the default option and hit “Next”
 14. Review the options you have choose and click “Create”
 15. Wait until all the Tasks to be deployed and enter the Network Load Balancer DNS name in your browser, you should see something similar to this: 
-16. [Image: Screenshot 2019-09-03 at 23.02.04.png]
+16. ![](images/results.png)

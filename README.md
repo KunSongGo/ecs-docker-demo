@@ -24,11 +24,45 @@
 import time
 
 from flask import Flask
+
 app = Flask(__name__)
+
+
 
 @app.route('/')
 def hello():
-    return 'Hello World! Welcome to demo-app'
+    return '<!DOCTYPE html> \
+<html lang="en"> \
+<head> \
+<title>Page Title</title> \
+<meta charset="UTF-8"> \
+<meta name="viewport" content="width=device-width, initial-scale=1"> \
+<style> \
+ \
+ \
+/* Header/logo Title */ \
+.header { \
+  padding: 80px; \
+  text-align: center; \
+  background: #1abc9c; \
+  color: white; \
+} \
+ \
+/* Increase the font size of the heading */ \
+.header h1 { \
+  font-size: 40px; \
+} \
+ \
+ \
+</style> \
+</head> \
+<body> \
+<div class="header"> \
+  <h1>ECS Fargate demo website</h1> \
+  <p>A <b>simple hello</b> from ECS Fargate</p> \
+</div> \
+</body> \
+</html>  '  
 ```
 
 ### 3. Create another file called `requirements.txt` in your project directory and paste this in:
@@ -85,7 +119,7 @@ python              3.7-alpine          39fb80313465        2 days ago          
 172.17.0.1 - - [29/Aug/2019 13:01:22] "GET / HTTP/1.1" 200 -
 
 [ec2-user@ip-10-0-0-204 ~]$ curl localhost:5000
-Hello World! Welcome to demo-app[ec2-user@ip-10-0-0-204 ~]$
+
 ```
 
 

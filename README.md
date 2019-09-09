@@ -75,16 +75,16 @@ python              3.7-alpine          39fb80313465        2 days ago          
 ### 7. Test the docker image 
 
 ```
-[ec2-user@ip-10-0-0-204 demo-docker]$ docker run -p 80:5000 <IMAGE-ID>
+[ec2-user@ip-10-0-0-204 demo-docker]$ docker run -p 5000:80 <IMAGE-ID>
  * Serving Flask app "app.py"
  * Environment: production
    WARNING: This is a development server. Do not use it in a production deployment.
    Use a production WSGI server instead.
  * Debug mode: off
- * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+ * Running on http://0.0.0.0:80/ (Press CTRL+C to quit)
 172.17.0.1 - - [29/Aug/2019 13:01:22] "GET / HTTP/1.1" 200 -
 
-[ec2-user@ip-10-0-0-204 ~]$ curl localhost:80
+[ec2-user@ip-10-0-0-204 ~]$ curl localhost:5000
 Hello World! Welcome to demo-app[ec2-user@ip-10-0-0-204 ~]$
 ```
 
@@ -92,7 +92,7 @@ Hello World! Welcome to demo-app[ec2-user@ip-10-0-0-204 ~]$
 
 ## Push image to ECR 
 
-### 1. Create ECR repository in AWS 
+### 1. Create ECR repository in AWS
 
 ```
 [ec2-user@ip-10-0-0-204 ~]$ aws ecr create-repository --repository-name ecs-demo-repository --region eu-west-1
@@ -114,6 +114,7 @@ Hello World! Welcome to demo-app[ec2-user@ip-10-0-0-204 ~]$
 ```
 
 ### 3. Get docker login credentials 
+Run the following command and copy the output, then paste it in your terminal and hit enter to login. 
 
 ```
 [ec2-user@ip-10-0-0-204 ~]$ aws ecr get-login --no-include-email --region eu-west-1

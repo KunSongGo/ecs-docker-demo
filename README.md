@@ -1,4 +1,4 @@
-# ECS Docker demo 
+# ECS Docker Demo 
 
 ## Terminologies 
 
@@ -6,6 +6,7 @@
 * Service: Amazon ECS allows you to run and maintain a specified number of instances of a task definition simultaneously in an Amazon ECS cluster. This is called a service. 
 * ECR: AWS registry service to store docker images. 
 * ECS: AWS Elastic Container Service.
+
 
 ## Build docker image
 **You may also clone this repository to get all source code in `/src` directly, then you should go to step 5 directly to start building container image.**
@@ -22,12 +23,9 @@
 
 ```python
 import time
-
 from flask import Flask
 
 app = Flask(__name__)
-
-
 
 @app.route('/')
 def hello():

@@ -4,14 +4,14 @@
 
 * Task Definition: A task definition is required to run Docker containers in Amazon ECS, it describes how your container should run in ECS.
 * Service: Amazon ECS allows you to run and maintain a specified number of instances of a task definition simultaneously in an Amazon ECS cluster. This is called a service. 
-* ECR: A registry to store docker images. 
+* ECR: AWS registry service to store docker images. 
 * ECS: AWS Elastic Container Service.
 
 ## Build docker image
-
+**You may also clone this repository to get all source code in `/src` directly, then you should go to step 5 directly to start building container image.**
 ### 1. Install docker
 
-```
+```shell
 [ec2-user@ip-10-0-0-204 ~]$ sudo yum install docker -y 
 [ec2-user@ip-10-0-0-204 ~]$ mkdir demo-docker
 [ec2-user@ip-10-0-0-204 ~]$ cd demo-docker/
@@ -20,7 +20,7 @@
 
 ### 2. Create a file called `app.py` in your project directory and paste this in:
 
-```
+```python
 import time
 
 from flask import Flask
@@ -67,7 +67,7 @@ def hello():
 
 ### 3. Create another file called `requirements.txt` in your project directory and paste this in:
 
-```
+```shell
 [ec2-user@ip-10-0-0-204 demo-docker]$ cat requirements.txt
 flask
 ```
@@ -93,13 +93,13 @@ EXPOSE 80
 
 ### 5. Build docker image
 
-```
+```shell
 [ec2-user@ip-10-0-0-204 demo-docker]$ docker build -t ecs-demo-app .
 ```
 
 ### 6. Check docker image
 
-```
+```shell
 [ec2-user@ip-10-0-0-204 demo-docker]$ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 ecs-demo-app        latest              54f8232440d3        14 minutes ago      213MB
@@ -108,8 +108,8 @@ python              3.7-alpine          39fb80313465        2 days ago          
 
 ### 7. Test the docker image 
 
-```
-[ec2-user@ip-10-0-0-204 demo-docker]$ docker run -p 5000:80 <IMAGE-ID>
+```shell
+[ec2-user@ip-10-0-0-204 demo-docker]$ docker run -p 8080:80 <IMAGE-ID>
  * Serving Flask app "app.py"
  * Environment: production
    WARNING: This is a development server. Do not use it in a production deployment.
@@ -118,17 +118,16 @@ python              3.7-alpine          39fb80313465        2 days ago          
  * Running on http://0.0.0.0:80/ (Press CTRL+C to quit)
 172.17.0.1 - - [29/Aug/2019 13:01:22] "GET / HTTP/1.1" 200 -
 
-[ec2-user@ip-10-0-0-204 ~]$ curl localhost:5000
+[ec2-user@ip-10-0-0-204 ~]$ curl localhost:8080
 
 ```
-
 
 
 ## Push image to ECR 
 
 ### 1. Create ECR repository in AWS
 
-```
+```shell
 [ec2-user@ip-10-0-0-204 ~]$ aws ecr create-repository --repository-name ecs-demo-repository --region eu-west-1
 {
     "repository": {
@@ -143,20 +142,26 @@ python              3.7-alpine          39fb80313465        2 days ago          
 
 ### 2. Tag image to repo
 
-```
-[ec2-user@ip-10-0-0-204 ~]$ docker tag ecs-demo-app xxxxxxxx.dkr.ecr.eu-west-1.amazonaws.com/ecs-demo-repository
+```shell
+[ec2-user@ip-10-0-0-204 ~]$ docker tag ecs-demo-app <ReposistoryUri>:v1
 ```
 
 ### 3. Get docker login credentials 
 Run the following command and copy the output, then paste it in your terminal and hit enter to login. 
 
-```
-[ec2-user@ip-10-0-0-204 ~]$ aws ecr get-login --no-include-email --region eu-west-1
+```shell
+[ec2-user@ip-10-0-0-204 ~]$ $(aws ecr get-login --no-include-email --region eu-west-1)
+WARNING! Using --password via the CLI is insecure. Use --password-stdin.
+WARNING! Your password will be stored unencrypted in /home/ec2-user/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
 ```
 
 ### 4. Push image to ECR 
 
-```
+```shell
 [ec2-user@ip-10-0-0-204 ~]$ docker push xxxxxxxx.dkr.ecr.eu-west-1.amazonaws.com/ecs-demo-repository
 ```
 
@@ -201,7 +206,7 @@ Now we have a Fargate cluster and we are going to launch a Service.
 4. Enter “3” in “Number of tasks” then hit “Next” 
 5. Choose the VPC you have noted in previous step and add the two subnets in this VPC
 6. In “Load Balancing” section, choose “Network Load Balancer”, you will see an alert saying “No load balancer is found” 
-7. Click the link “EC2 Console” to create a Network Load balancer“ by following this guide (https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancer-getting-started.html) and note the Network Load Balancer DNS name.
+7. Click the link “EC2 Console” to create a Network Load balancer“ by following this guide (https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancer-getting-started.html), please make sure to delete all target groups attached to this load balancer and note the Network Load Balancer DNS name.
 8. Once you have created a Network Load Balancer, click refresh button and you should be able to see the load balancer you’ve created. Choose that Network Load Balancer and then click the button "Add to load balancer" button 
 9. ![](images/add-nlb.png)
 10. Enter “80” in the second field of “Production listener port” 

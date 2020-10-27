@@ -148,7 +148,7 @@ python              3.7-alpine          39fb80313465        2 days ago          
 Run the following command and copy the output, then paste it in your terminal and hit enter to login. 
 
 ```shell
-[ec2-user@ip-10-0-0-204 ~]$ $(aws ecr get-login --no-include-email --region eu-west-1)
+[ec2-user@ip-10-0-0-204 ~]$ aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin xxxxxxxx.dkr.ecr.region.amazonaws.com
 WARNING! Using --password via the CLI is insecure. Use --password-stdin.
 WARNING! Your password will be stored unencrypted in /home/ec2-user/.docker/config.json.
 Configure a credential helper to remove this warning. See
